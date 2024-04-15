@@ -554,6 +554,7 @@ function batt_parallel(){
   let array_greater_lead_value_division = [];
   let i = 0;
   let j = 0;
+  let increase_amp_combination = 0;
 
   if (parseFloat(battery_type.value) == 0.7 || parseFloat(battery_type.value) == 0.8){
   
@@ -570,9 +571,11 @@ function batt_parallel(){
       let last_four_new = [];
       let ceil_ampere_hour = [];
       let parallel = [];
+      // let increment_sort =[];
       let i = 0;
       let j = 0;
       let k = 0;
+      // let l = 0;
 
       lastFourElements.forEach(function(last_four){
         last_four_new[i] = batt_capcity/last_four;
@@ -611,45 +614,70 @@ function batt_parallel(){
 
       // Sort the subtractedValues array in ascending order
       // Sort the subtractedValues array in ascending order
-      let sortedValues = true_AH.slice().sort((a, b) => a - b);
 
-      console.log(sortedValues, "sortedValues");
-    
-      let index = 0;
+      // Create a sorted array of indices based on sorted values
 
-      function displayNextValue() {
-        if (index >= sortedValues.length) {
-          index = 0; // Reset index when end of values is reached
+      // Create a sorted array of indices based on sorted values
+      let sortedIndices = true_AH.map((_, index) => index).sort((a, b) => true_AH[a] - true_AH[b]);
+      
+      // Create an object to store the data
+      let sortedData = {};
+      
+      // Populate the object with sorted values and their corresponding indices
+      sortedIndices.forEach((sortedIndex, sortedPosition) => {
+          sortedData[sortedPosition] = {
+              value: true_AH[sortedIndex],
+              originalIndex: sortedIndex
+          };
+      });
+      
+      // Extract the originalIndex property from each value in sortedData and store them in an array
+      let originalIndexArray = Object.values(sortedData).map(obj => obj.originalIndex);
+      
+      function parallel_combination(){
+
+        if(increase_amp_combination == originalIndexArray.length){
+          increase_amp_combination = 0;
         }
 
-        let value = sortedValues[index];
-        let smallestIndex = true_AH.indexOf(value);
+        let find_index_ampere = originalIndexArray[increase_amp_combination];
 
-        if(ceil_ampere_hour[smallestIndex] <= batt_capcity * 1.2){
+        if ((lastFourElements[find_index_ampere] * parallel[find_index_ampere]) < batt_capcity * 1.2){
           Battery_Ampere_value.style.backgroundColor = "green";
         }
         else{
           Battery_Ampere_value.style.backgroundColor = "rgb(90, 90, 90)";
         }
+        
+        Battery_Ampere_value.innerHTML = lastFourElements[find_index_ampere] + "AH";
+        Battery_In_Parallel_Value.innerHTML = "PARALLEL " + parallel[find_index_ampere];
 
-        // console.log(ceil_ampere_hour <= batt_capcity * 1.2, "status");
+        increase_amp_combination++;
 
-      
-
-        // console.log(smallestIndex, "smallestIndex");
-
-        Battery_Ampere_value.innerHTML = lastFourElements[smallestIndex] + "AH";
-        Battery_In_Parallel_Value.innerHTML = "PARALLEL " + parallel[smallestIndex];
-
-        index++;
-
-        setTimeout(displayNextValue, 5000); // Display next value after 5 seconds
-
-        // console.log(index, (parseInt(lastFourElements[smallestIndex]) * parseInt(parallel[smallestIndex])), "AH")
+        console.log(increase_amp_combination, originalIndexArray.length);
       }
 
-      displayNextValue(); // Start displaying values      
+      let o = 0;
+
+      if(o == 0){
+        parallel_combination();
+        o++
+      }
+
+      document.getElementById('battery_ampere_click').addEventListener('click', function() {
+        // Run displayNextValue function when the element is clicked
+        parallel_combination();
+      });
+
     }
+
+    // if (m == 0){
+    //   displayNextValue();
+    //   m++;
+    // }
+    // // Attach click event listener to an element
+
+  }
     // else{
     //   Battery_In_Parallel_Value.innerHTML = "PARALLEL " + array_greater_lead_value[0]; 
 
@@ -662,7 +690,7 @@ function batt_parallel(){
     //   let i = 0;
     //   array_greater_lead_value_division[i] = batt_capcity/array_lead_compare;
     // })
-  }
+  
 }
 
 // const select_container = document.querySelectorAll(".select_container");
