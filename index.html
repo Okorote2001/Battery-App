@@ -1,0 +1,206 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inv Battery Cap. Calculator</title>
+    <link rel="stylesheet" href="battApp.css">
+</head>
+<body id="body">
+
+    <div class="error_notification error" id="error_notification">
+        <p></p>
+    </div>
+    <div class="App" id="App">
+        <header onclick="close_bar()">
+            <h1>INVERTER BATTERY CAPACITY AND BACKUP-TIME CALCULATOR</h1>
+        </header>
+    
+        <div class="moving-text">
+            <h1 class="scrolling-title">YAKUBU ABDULHAKEEM (ENG/EEE/01901484) INVERTER BATTERY CAPACITY AND BACKUP-TIME CALCULATOR. FINAL YEAR PROJECT OF 2024</h1>
+        </div>
+
+        <div class="appButtons" id="parentElement">
+            <div class="select_container">
+                <h2>INVERTER VOLTAGE:</h2>
+                <select name="inverter-voltage" id="inverter-voltage" onchange="inv_voltage()">
+                    <option value="" disabled selected hidden></option>
+                    <option value="10.5" >12v</option>
+                    <option value="21" >24v</option>
+                    <option value="42" >48v</option>
+                    <option value="84" >96v</option>
+                    <option value="105" >120v</option>
+                    <option value="216" >240v</option>
+                    <option value="315" >360v</option>
+                    <option value="420" >480v</option>
+                </select>
+            </div>
+            
+            <div class="select_container">
+                <h2>INVERTER EFFICIENCY:</h2>
+                <select name="inverter-efficiency" id="inverter-efficiency" onchange="inv_efficiency()">
+                    <option value="" disabled selected hidden></option>
+                    <option value="0.60" >60%</option>
+                    <option value="0.65" >65%</option>
+                    <option value="0.70" >70%</option>
+                    <option value="0.75" >75%</option>
+                    <option value="0.80" >80%</option>
+                    <option value="0.85" >85%</option>
+                    <option value="0.90" >90%</option>
+                    <option value="0.95" >95%</option>
+                </select>
+            </div>
+            
+            <div class="select_container">
+                <h2>BATTERY TYPE:</h2>
+                <select name="Battery-Type" id="Battery-Type" onchange="batt_Type()">
+                    <option value="" disabled selected hidden></option>
+                    <option value="0.80" >AGM LEAD-ACID BATTERY (DRY CELL)</option>
+                    <option value="0.70" >FLOODED LEAD-ACID BATTERY (WET CELL)</option>
+                    <option value="0.90" >LITIUM-ION BATTERY</option>
+                    <option value="0.85" >NICKEL-CADMIUM BATTERY</option>
+                </select>
+            </div>
+        
+            <div class="select_container">
+                <h2>BATTERY VOLTAGE:</h2>
+                <select name="battery-voltage" id="battery-voltage" onchange="batt_voltage()">
+                    <option value="" disabled selected hidden></option>
+                    <option value="1.2">1.2v</option>
+                    <option value="2">2v</option>
+                    <option value="12">12v</option>
+                    <option value="24" >24v</option>
+                    <option value="48" >48v</option>
+                </select>
+            </div>
+        
+            <!-- <select name="Battery-ampHour" id="Battery-ampHour" onchange="Batt_ampHour">
+                <option value="" disabled selected hidden>Select Battery Ampere-hour (Ah)</option>
+                <option value="7">7Ah</option>
+                <option value="9">9Ah</option>
+                <option value="45">45Ah</option>
+                <option value="50">50Ah</option>
+                <option value="75">75Ah</option>
+                <option value="100">100Ah</option>
+                <option value="120">120Ah</option>
+                <option value="150">150Ah</option>
+                <option value="180">180Ah</option>
+                <option value="200">200Ah</option>
+                <option value="220">220Ah</option>
+                <option value="250">250Ah</option>
+                <option value="280">280Ah</option>
+                <option value="300">300Ah</option>
+                <option value="350">350Ah</option>
+                <option value="400">400Ah</option>
+                <option value="500">500Ah</option>
+                <option value="600">600Ah</option>
+                <option value="800">800Ah</option>
+                <option value="1000">1000Ah</option>
+                <option value="1200">1200Ah</option>
+                <option value="1500">1500Ah</option>
+                <option value="1800">1800Ah</option>
+                <option value="2000">2000Ah</option>
+            </select> -->
+            
+            <div class="select_container">
+                <h2>LOAD POWER FACTOR:</h2>    
+                <select name="load-power-factor" id="load-power-factor" onchange="load_power_factor()">
+                    <option value="" disabled selected hidden></option>
+                    <option value="0.70">0.7</option>
+                    <option value="0.75">0.75</option>
+                    <option value="0.80">0.8</option>
+                    <option value="0.85">0.85</option>
+                    <option value="0.90">0.9</option>
+                    <option value="0.90">0.95</option>
+                    <option value="1.00">1</option>
+                </select>
+            </div>
+
+            <div class="load"> 
+                <h2>LOAD</h2>   
+                <div class="load_content">
+                    <h2>CONTINUOUS:</h2>
+                        <div class="power">
+                            <h3>POWER (w):</h3>
+                            <input type="number" id="con-load-power" placeholder="Enter" onchange="continous_load()">
+                        </div>
+                        <div class="time" id="time">
+                            <h3>BACKUP-TIME</h3>
+                                <div class="backupTime">
+                                    <h4>Hr:</h4>
+                                    <input type="number" id="timeHour" placeholder="0:0" onclick="timeHr()">
+                                    <h4>Min:</h4>
+                                    <input type="number" id="timeMin" placeholder="0:0" onclick="timeMin()">
+                                </div>                 
+                        </div>            
+                </div>
+        
+                <div class="load_content sec_load_content">
+                    <h2>INTERMITENT:</h2>
+                        <div class="power">
+                            <h3>POWER (w):</h3>
+                            <input type="number" id="int-load-power" placeholder="Enter" onchange="intermitent_load()">
+                        </div>
+                        
+                        <div class="time">
+                            <h4>% UTILIZATION:</h4>
+                            <select name="utilization" id="utilization" class="utilization" onchange="utilizFac()">
+                                <option value="" disabled selected hidden></option>
+                                <option value="0.10">10%</option>
+                                <option value="0.20">20%</option>
+                                <option value="0.30">30%</option>
+                                <option value="0.40">40%</option>
+                                <option value="0.50">50%</option>
+                                <option value="0.60">60%</option>
+                                <option value="0.70">70%</option>
+                                <option value="0.80">80%</option>
+                                <option value="0.90">90%</option>
+                            </select>                
+                        </div>
+                </div>
+            </div> 
+
+            <button type="submit" name="Calculate" onclick="calculate()" id="cal_button">Calculate</button>
+        </div>
+    </div>
+        <div id="result" class="result">
+            <div class="open-close-bar" onclick="close_notification()">
+                <div class="open-close-key"></div>
+            </div>
+            <div class="cal_result">
+                <div class="result_header">
+                    <h1>RESULT</h1>
+                </div>
+                <div class="main result_plain">
+                    <div>
+                        <h1>Inverter Capacity</h1>
+                        <span id="Inverter_Capacity_value"></span>
+                    </div>
+                    <div>
+                        <h1>Battery Capacity</h1>
+                        <span id="Battery_Capacity_value"></span>
+                    </div>
+                    <div>
+                        <h1>Battery Ampere</h1>
+                        <span id="Battery_Ampere_value"></span>
+                    </div>
+                    <div>
+                        <h1>Battery Connection</h1>
+                        <span id="Battery_In_Series_Value"></span>
+                        <span id="Battery_In_Parallel_Value"></span>
+                    </div>
+                </div>
+                <div class="main result_note">
+                    <div>
+                        To the best of the seller’s knowledge, the odometer reading listed in the vehicle description above reflects the actual mileage of the vehicle. The vehicle’s odometer was not altered, set aside, or disconnected while in the seller’s possession, and the seller has no knowledge of anyone doing so.
+
+The seller has no knowledge of any hidden defects in or to the vehicle and believes, to the best of the seller’s knowledge, that the vehicle being sold is in good operating condition. Said vehicle is otherwise sold in “as is” condition and is currently located.
+
+                    </div>
+                </div>
+                <div></div>
+            </div>
+        </div>
+</body>
+<script src="battApp.js"></script>
+</html>
