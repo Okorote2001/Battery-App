@@ -14,7 +14,8 @@ body{
   align-items: center;
   height: 100vh;
   overflow: hidden;
-  width: 100%;
+  width: 100vw;
+  user-select: none;
 }
 
 /* Whole App Container */
@@ -327,6 +328,7 @@ button{
   justify-content: flex-start;
   transition: all .5s ease-in-out;
   border-radius: 1rem;
+  overflow: hidden;
  
   .open-close-bar{
     width: 1.8rem;
@@ -399,8 +401,6 @@ button{
     align-items: center;
     justify-content: center;
     justify-content: space-around;
-
-
   }
 
   .result_plain{
@@ -471,7 +471,7 @@ button{
 
   .result_note{
 
-    div{
+    &>div{
       width: 95%;
       height: 93%;
       background-color: black;
@@ -498,5 +498,118 @@ button{
     width: 600vw;
     height: 200%;
     right: -100%;
+  }
+}
+
+
+.result_container{
+  overflow-y: scroll;
+  color: white;
+
+  .note_title{
+    position: absolute;
+    height: 1.9rem;
+    width: 81.2%;
+    background-color: red;
+    border-radius: .5rem .5rem 0rem 0rem;
+    background-color: rgba(0, 0, 0, 0.486);
+
+    &::after{
+      position: absolute;
+      content: "Note";
+      padding: .4rem 1rem;
+      background-color: green;
+      font-size: 1rem;
+      right: 42%;
+      border-radius: 0rem 0rem 0.5rem 0.5rem;
+      box-shadow: 0rem 0rem .2rem white;
+    }
+  }
+
+  .introduction{
+    margin-top: 2.2rem;
+    margin-inline: auto;
+    height: max-content;
+    width: 95%;
+    text-align: justify;
+  }
+
+  .comparison_table{
+    display: flex;
+    color: white;
+    width: fit-content;
+    margin: 1rem auto;
+    border: solid 0.1rem white;
+    border-radius: .5rem;
+    max-width: 90%;
+
+    div{
+      min-width: 8rem;  
+      text-wrap: nowrap;
+      font-size: 90%;
+      
+      p:nth-child(1){
+        text-align: center;
+        background-color: gray;
+        border-bottom: solid 0.1rem white;
+      }
+    }
+
+    div:nth-child(1){
+      border-right-color: white;
+      border-right-style: solid;
+      border-right-width: 0.1rem;
+
+      p:nth-child(1){
+        border-top-left-radius: .5rem;
+        font-weight: 900;
+      }
+
+      span{
+        color: red;
+        font-weight: 900;
+      }
+    }
+
+    div:nth-child(2){
+      p:nth-child(1){
+        border-top-right-radius: .5rem;
+        font-weight: 900;
+      }
+
+      span{
+        color: green;
+        font-weight: 900;
+      }
+    }
+
+    p{
+      padding: .2rem 1rem;
+    }
+  }
+
+  .extra{
+    width: 95%;
+    margin-inline: auto;
+    text-align: justify;
+
+    p{
+      margin-bottom: 1rem;
+    }
+
+    p:nth-child(3){
+      color: blue;
+    }
+  }
+}
+
+#battery_ampere_click{
+
+  &:hover{
+    background-color: rgb(32, 32, 32);
+  }
+
+  &:active{
+    background-color: rgba(117, 117, 117, 0.349);
   }
 }
