@@ -163,7 +163,7 @@
             <button type="submit" name="Calculate" onclick="calculate()" id="cal_button">Calculate</button>
         </div>
     </div>
-        <div id="result" class="result">
+        <div id="result" class="result .open-close_not">
             <div class="open-close-bar" onclick="close_notification()">
                 <div class="open-close-key"></div>
             </div>
@@ -191,14 +191,36 @@
                     </div>
                 </div>
                 <div class="main result_note">
-                    <div>
-                        To the best of the seller’s knowledge, the odometer reading listed in the vehicle description above reflects the actual mileage of the vehicle. The vehicle’s odometer was not altered, set aside, or disconnected while in the seller’s possession, and the seller has no knowledge of anyone doing so.
-
-The seller has no knowledge of any hidden defects in or to the vehicle and believes, to the best of the seller’s knowledge, that the vehicle being sold is in good operating condition. Said vehicle is otherwise sold in “as is” condition and is currently located.
-
+                    <div class="result_container">
+                        <h1 class="note_title"></h1>
+                        <div class="introduction">The app delivers exceptional results, meticulously approximating values to standard or market benchmarks. With an astonishingly close margin to calculated theoretical values, it emerges as a powerful engineering tool, facilitating seamless practical application. Here's how it differ in theorical vaues:</div>
+                        <div class="comparison_table">
+                            <div class="theoretical">
+                                <p>THEORY</p>
+                                <p>Inv. Capacity: <span id="Ti1"></span></p>
+                                <p>Bat Capacity: <span id="Tb1"></span></p>
+                                <p>Backup-Time: <span id="Tbt1"></span></p>
+                            </div>
+                            <div class="market">
+                                <p>PRACTICAL</p>
+                                <p>Inv. Capacity: <span id="Ti2"></span></p>
+                                <p>Bat Capacity: <span id="Tb2"></span></p>
+                                <p>Backup-Time: <span id="Tbt2"></span></p>
+                            </div>
+                        </div>
+                        <div class="extra">
+                            <p>                            
+                                Inverter capacity is converted from watts to KVA and approximated to align with standard market values, facilitating easy comparison with common products. Moreover, a 20% increment is applied to account for potential load variations, ensuring optimal performance in real-world scenarios.
+                            </p>
+                            <p>                            
+                                It's worth noting that the app can showcase various parallel connection combinations for all standard or available market batteries, ensuring alignment with desired backup time. Additionally, it provides insights into how slight adjustments can impact overall backup time and battery bank capacity.
+                            </p>
+                            <p>
+                                Click on the battery ampere bar to explore all possible parallel and series connections for the batteries.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div></div>
             </div>
         </div>
 </body>
