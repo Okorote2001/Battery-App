@@ -33,6 +33,14 @@ let isButtonClick = false;
 let inv_market_capacity = [0.25, 0.375, 0.625, 1, 1.5, 1.7, 2, 2.5, 2.7, 3.5, 3.7, 4, 4.5, 5, 5.5, 5.7, 6, 6.5, 7.5, 8, 10, 12, 12.5, 15, 20, 25, 30, 40, 50, 60, 70, 80, 100, 120, 150, 200, 250, 300, 500, 700, 1000];
 let inv_close_market_cap;
 
+let cont_load_current_drawn;
+let int_load_current_drawn;
+let capacity_utilization;
+let int_load_percent_time;
+let DoD;
+let cont_batt_capacity;
+let intermitent_batt_capacity;
+
 // Event listeners for select containers
 select_container.forEach(function(select_container) {
     // Event listener for mouseenter
@@ -117,7 +125,7 @@ battery_voltage.addEventListener("click", function(){
     if( parseFloat(compare.value) > parseFloat(inverter_voltage.value) * (12/10.5)){
       compare.disabled = true;
     } 
-  })
+  });
 });
 
 // Function to log load power factor
@@ -284,14 +292,6 @@ function calculate() {
     // Calculate total time in hours
     let time = parseInt(backup_time_hr.value) + (parseInt(backup_time_Min.value) * 1 / 60);
 
-    let cont_load_current_drawn;
-    let int_load_current_drawn;
-    let capacity_utilization;
-    let int_load_percent_time;
-    let DoD;
-    let cont_batt_capacity;
-    let intermitent_batt_capacity;
-
     // Determine capacity utilization based on time
     if (time <= 1.9999) {
         capacity_utilization = 0.5;
@@ -445,6 +445,8 @@ function calculate() {
     }
 
     else {
+
+    let cal_inv_kva;
     header.classList.add("deem");
     result_bar.style.transform = "translateX(66vw)";
     result_bar.classList.add("open-close_not");
@@ -520,7 +522,7 @@ function close_bar(){
 function inv_mak_capacity() {
   let value_greater_array = [];
   let i = 0;
-  let cal_inv_kva = (((parseFloat(con_load_power.value) + parseFloat(int_load_power.value)) * 1.2) / parseFloat(load_power_fac.value)/1000);
+  cal_inv_kva = (((parseFloat(con_load_power.value) + parseFloat(int_load_power.value)) * 1.2) / parseFloat(load_power_fac.value)/1000);
   console.log(cal_inv_kva);
   console.log(typeof(inv_market_capacity[0]));
   inv_market_capacity.forEach(function(inv_mak_cap) {
@@ -549,17 +551,28 @@ function batt_parallel(){
   let lead_acid_battery_ampere = [7, 9, 18, 20, 25, 45, 50, 75, 100, 120, 150, 180, 200, 220, 240, 250];
   let lituim_ion_battery_ampere = [7, 9, 18, 45, 50, 75, 100, 120, 150, 180, 200, 220, 240, 250, 300];
   let nickel_cadmiu_battery_ampere = [10, 20, 50, 100, 120, 150, 180, 200, 220, 250, 280, 300, 350, 400, 500, 600, 800, 1000, 1200, 1500, 1800, 2000];
+  let battery_type_amperes;
 
   let array_greater_lead_value = [];
-  let array_greater_lead_value_division = [];
+
   let i = 0;
   let j = 0;
   let increase_amp_combination = 0;
 
   if (parseFloat(battery_type.value) == 0.7 || parseFloat(battery_type.value) == 0.8){
-  
-    lead_acid_battery_ampere.forEach(function(lead_amp){
-      if(lead_acid_battery_ampere[j] >= parseFloat(batt_capcity)){
+    battery_type_amperes = lead_acid_battery_ampere; 
+  }
+
+  if (parseFloat(battery_type.value) == 0.9){
+    battery_type_amperes = lituim_ion_battery_ampere; 
+  }
+
+  if (parseFloat(battery_type.value) == 0.85){
+    battery_type_amperes = nickel_cadmiu_battery_ampere; 
+  }
+ 
+    battery_type_amperes.forEach(function(lead_amp){
+      if(battery_type_amperes[j] >= parseFloat(batt_capcity)){
         array_greater_lead_value[i] = lead_amp;
         i++;
       }
@@ -567,7 +580,7 @@ function batt_parallel(){
     });
 
    if (true){
-      let lastFourElements = lead_acid_battery_ampere;
+      let lastFourElements = battery_type_amperes;
       let last_four_new = [];
       let ceil_ampere_hour = [];
       let parallel = [];
@@ -648,13 +661,30 @@ function batt_parallel(){
         else{
           Battery_Ampere_value.style.backgroundColor = "rgb(90, 90, 90)";
         }
-        
+
         Battery_Ampere_value.innerHTML = lastFourElements[find_index_ampere] + "AH";
         Battery_In_Parallel_Value.innerHTML = "PARALLEL " + parallel[find_index_ampere];
 
         increase_amp_combination++;
 
         console.log(increase_amp_combination, originalIndexArray.length);
+
+        const Ti1  = document.getElementById('Ti1');
+        const Tb1  = document.getElementById('Tb1');
+        const Tbt1 = document.getElementById('Tbt1');
+        const Ti2  = document.getElementById('Ti2');
+        const Tb2  = document.getElementById('Tb2');
+        const Tbt2 = document.getElementById('Tbt2');
+        let practical_batt_cap = parseFloat(((cont_load_current_drawn * time) / (capacity_utilization)) / (DoD)) +
+        parseFloat(((int_load_current_drawn * int_load_percent_time) / (capacity_utilization)) / (DoD)); 
+
+        Ti1.innerHTML = " " + cal_inv_kva.toFixed(2) + "KVA";
+        Ti2.innerHTML = " " + Inverter_Capacity_value.innerHTML;
+        Tb1.innerHTML = " " + batt_capcity + "AH"
+        Tb2.innerHTML = " " + (lastFourElements[find_index_ampere] *parallel[find_index_ampere]) + "AH";
+        Tbt1.innerHTML = " " + parseInt(backup_time_hr.value) + "hr, " + parseInt(backup_time_Min.value) + "min"
+        let practical_time =(((lastFourElements[find_index_ampere] *parallel[find_index_ampere])/batt_capcity) * (parseInt(backup_time_hr.value) + (parseInt(backup_time_Min.value) * 1 / 60))).toFixed(2);
+        Tbt2.innerHTML = Math.floor(parseInt(practical_time) + (parseInt(backup_time_Min.value) * 1 / 60)) + "hr, " + ((practical_time - Math.floor(practical_time)) * 60).toFixed(0) + "min"
       }
 
       let o = 0;
@@ -677,7 +707,7 @@ function batt_parallel(){
     // }
     // // Attach click event listener to an element
 
-  }
+
     // else{
     //   Battery_In_Parallel_Value.innerHTML = "PARALLEL " + array_greater_lead_value[0]; 
 
